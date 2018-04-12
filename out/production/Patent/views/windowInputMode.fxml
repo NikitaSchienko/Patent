@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -12,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="733.0" prefWidth="1199.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Controller">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -30,6 +32,11 @@
             <MenuItem mnemonicParsing="false" text="Режим моделирования по выходным параметрам" />
           </items>
         </Menu>
+            <Menu mnemonicParsing="false" text="Библиотека">
+              <items>
+                <MenuItem fx:id="showLibrary" mnemonicParsing="false" text="Открыть библиотеку" />
+              </items>
+            </Menu>
         <Menu mnemonicParsing="false" text="Помощь">
           <items>
             <MenuItem mnemonicParsing="false" text="Открыть справку" />
@@ -37,14 +44,143 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-      <children>
-        <Label alignment="CENTER" layoutX="467.0" layoutY="274.0" style="&#10;" text="Диплом" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false" AnchorPane.bottomAnchor="274.0" AnchorPane.leftAnchor="467.0" AnchorPane.rightAnchor="467.0" AnchorPane.topAnchor="274.0">
-          <font>
-            <Font size="18.0" />
-          </font>
-        </Label>
-      </children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="771.0" prefWidth="1.0" VBox.vgrow="ALWAYS">
+         <children>
+            <TabPane layoutX="625.0" layoutY="14.0" prefHeight="362.0" prefWidth="560.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="350.0" AnchorPane.leftAnchor="600.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+              <tabs>
+                <Tab text="График №1">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="560.0">
+                           <children>
+                              <LineChart fx:id="chartOne" layoutY="-16.0" prefHeight="306.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="График №2">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="248.0" prefWidth="560.0">
+                           <children>
+                              <LineChart layoutX="-138.0" layoutY="-76.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                           </children></AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab text="График №3">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <LineChart layoutX="-67.0" layoutY="-103.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <ListView fx:id="resultListView" layoutX="624.0" layoutY="351.0" prefHeight="287.0" prefWidth="560.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="624.0" AnchorPane.rightAnchor="15.0" />
+            <ScrollPane layoutX="14.0" layoutY="15.0" prefHeight="621.0" prefWidth="577.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
+               <content>
+                  <VBox prefHeight="608.0" prefWidth="563.0">
+                     <children>
+                        <Label text="Источник электрического поля:">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Диаметр электреда:" />
+                        <TextField fx:id="diametrElectret" />
+                        <Label text="Расстояние между электретами:" />
+                        <TextField fx:id="distanceElectret" text="0.01" />
+                        <Label text="Заряд электрета:" />
+                        <TextField fx:id="chargeElectret" />
+                        <Label text="Толщина электреда:" />
+                        <TextField disable="true" />
+                        <Label text="Диэлектрическая проницаемость:" />
+                        <TextField fx:id="electretPenetration" />
+                        <Label text="Расстояние до точки между электретами:">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="distancePointElectret" />
+                        <Separator prefHeight="23.0" prefWidth="446.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <Label text="Активный диэлектрик:">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Диэлектрическая проницаемость:" />
+                        <TextField disable="true" />
+                        <Label text="Разница полей (delta):">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="fieldDifference" text="0.05" />
+                        <Label text="R/d:">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="radiusToDiametr" text="10" />
+                        <Separator prefHeight="23.0" prefWidth="446.0">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <Label text="Оптоволоконный кабель:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="Диаметр кабеля:" />
+                        <TextField disable="true" />
+                        <Label text="Длина ВБР:" />
+                        <TextField disable="true" />
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+               </content>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </ScrollPane>
+            <Button fx:id="startModelingButton" layoutX="1120.0" layoutY="664.0" mnemonicParsing="false" onAction="#startModeling" text="Запустить" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+         </children>
     </AnchorPane>
   </children>
 </VBox>

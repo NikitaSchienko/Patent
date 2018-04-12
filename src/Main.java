@@ -1,4 +1,3 @@
-package controllers;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +11,7 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        Parent root = FXMLLoader.load(getClass().getResource("../views/windowInputMode.fxml"));
+        Parent root = FXMLLoader.load(Main.class.getResource("views/windowInputMode.fxml"));
         primaryStage.setTitle("Моделирование по входным параметрам");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
