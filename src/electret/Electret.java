@@ -17,9 +17,9 @@ public class Electret
 //        this.radiusToDiametr = radiusToDiametr;
 //    }
 
-    public static Double tensionAtAPoint(double charge, double E, double R, double d, double x)
+    public static Double tensionInPoint(double charge, double E, double R, double d, double x)
     {
-        return charge/(2*PI*E*DIELECTRIC_CONSTANT)*((1-x/(Math.sqrt(R*R+x*x))+(1-(d-x)/(Math.sqrt(R*R+(d-x)*(d-x))))));
+        return charge/(2*PI*E*DIELECTRIC_CONSTANT)*((1-(x/(Math.sqrt(R*R+x*x))))+(1-((d-x)/Math.sqrt(R*R+(d-x)*(d-x)))));
     }
 
 

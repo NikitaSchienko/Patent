@@ -11,9 +11,11 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        Parent root = FXMLLoader.load(Main.class.getResource("views/windowInputMode.fxml"));
+        Parent root = FXMLLoader.load(Main.class.getResource("views/inputMode.fxml"));
         primaryStage.setTitle("Моделирование по входным параметрам");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setWidth(1250);
+        primaryStage.setHeight(1000);
         primaryStage.show();
     }
 
