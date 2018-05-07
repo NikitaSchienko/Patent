@@ -1,0 +1,186 @@
+.button
+{
+    -fx-background-color: white;
+    -fx-border-color: gray;
+    -fx-border-radius: 5;
+}
+
+.button:hover
+{
+    -fx-background-color: silver;
+    -fx-border-color: cornflowerblue;
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+}
+
+.menu-bar
+{
+    -fx-background-color: white;
+    -fx-border-color: gray;
+}
+
+.background
+{
+    -fx-background-color: white;
+}
+
+.scroll-pane
+{
+    -fx-background-color: white;
+    -fx-border-color: gray;
+}
+
+.scroll-bar:vertical
+{
+    -fx-background-color:transparent;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: gray;
+    -fx-background-radius: 5em;
+}
+
+/*.tab-pane
+{
+    -fx-background-color: white;
+    -fx-border-color: gray;
+}*/
+
+/*.combo-box
+{
+    -fx-background-color: gray;
+}*/
+
+/*.combo-box .arrow {
+    -fx-background-color: gray;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: white;
+    -fx-size: 5;
+}*/
+
+.vbox
+{
+    -fx-background-color: white;
+}
+/*tab*/
+.tab-pane .tab-header-area .tab-header-background
+{
+    -fx-opacity: 0;
+}
+
+.tab-pane
+{
+    -fx-tab-min-width:90px;
+}
+
+.tab{
+    -fx-background-insets: 0 1 0 1,0,0;
+}
+.tab-pane .tab
+{
+    -fx-background-color: white;
+}
+
+.tab-pane .tab:selected
+{
+    -fx-background-color: lightgray;
+    -fx-border-radius: 5 5 0 0;
+    -fx-border-width: 2 2 0 2;
+    -fx-border-color: lightgray;
+}
+
+.tab-pane .tab:hover
+{
+    -fx-background-color: white;
+    -fx-border-radius: 5 5 0 0;
+    -fx-border-width: 2 2 0 2;
+    -fx-border-color: gray;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #828282;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label
+{
+    -fx-alignment: CENTER;
+    -fx-text-fill: black;
+}
+/*end tab*/
+.chart
+{
+    -fx-background-color: lightgray;
+}
+
+
+.table-view
+{
+    -fx-border-radius: 5;
+    -fx-border-color: gray;
+}
+.table-view .column-header
+{
+    -fx-background-color: gray;
+    -fx-alignment: CENTER;
+    -fx-border-color: lightgray;
+    -fx-border-radius: 5 5 0 0;
+}
+.table-view .column-header-background .label
+{
+    -fx-text-fill: white;
+}
+
+.text-field
+{
+    -fx-background-color: white;
+    -fx-border-color: gray;
+    -fx-border-radius: 5;
+    /*-fx-border-width: 2;*/
+}
+
+.combo-box .text-field
+{
+    -fx-background-color: white;
+    -fx-border-color: gray;
+    -fx-border-radius: 5 0 0 5;
+}
+
+.combo-box
+{
+    -fx-background-color: gray;
+}
+
+.combo-box .arrow-button
+{
+    -fx-background-color: gray;
+    -fx-size: 5;
+}
+.combo-box .arrow
+{
+    -fx-background-color: white;
+}
+
+.combo-box .arrow-button:hover
+{
+    -fx-background-color: silver;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-size: 5;
+    -fx-border-radius: 0 5 5 0;
+}
+
+.chart-line-symbol
+{
+    -fx-background-color: transparent;
+}
+
+
+.chart-legend-item-symbol
+{
+    -fx-background-color: orange;
+}

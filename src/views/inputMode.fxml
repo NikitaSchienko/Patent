@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.text.*?>
@@ -16,37 +19,66 @@
 
 <VBox prefHeight="733.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Controller">
     <children>
-        <MenuBar VBox.vgrow="NEVER">
+        <MenuBar stylesheets="@style.css" VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="Файл">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#saveModel" text="Сохранить в файл" />
                         <MenuItem mnemonicParsing="false" onAction="#downloadModel" text="Загрузить из файла" />
                         <MenuItem mnemonicParsing="false" onAction="#createFileDoc" text="Создать отчет" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" text="Выход" />
                     </items>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/folder.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Режим">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Режим моделирования по входным параметрам" />
                         <MenuItem mnemonicParsing="false" text="Режим моделирования по выходным параметрам" />
                     </items>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/menu.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Библиотека">
                     <items>
                         <MenuItem fx:id="showLibraryItem" mnemonicParsing="false" onAction="#showLibrary" text="Открыть библиотеку" />
                     </items>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/books.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Помощь">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Открыть справку" />
                     </items>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/help.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="701.0" prefWidth="1302.0" VBox.vgrow="ALWAYS">
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="701.0" prefWidth="1302.0" styleClass="background" stylesheets="@style.css" VBox.vgrow="ALWAYS">
             <children>
-                <TabPane layoutX="624.0" layoutY="14.0" prefHeight="336.0" prefWidth="611.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="350.0" AnchorPane.leftAnchor="624.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+                <TabPane layoutX="624.0" layoutY="14.0" prefHeight="336.0" prefWidth="611.0" style="-fx-border-color: silver;" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="350.0" AnchorPane.leftAnchor="624.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
                     <tabs>
                         <Tab text="График №1">
                             <content>
@@ -54,7 +86,7 @@
                                     <children>
                                         <LineChart fx:id="chartOne" layoutY="-16.0" prefHeight="306.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <xAxis>
-                                                <CategoryAxis side="BOTTOM" />
+                                                <NumberAxis side="BOTTOM" />
                                             </xAxis>
                                             <yAxis>
                                                 <NumberAxis side="LEFT" />
@@ -68,9 +100,9 @@
                             <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="248.0" prefWidth="560.0">
                                     <children>
-                                        <LineChart layoutX="-138.0" layoutY="-76.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <LineChart fx:id="chartTwo" layoutX="-138.0" layoutY="-76.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <xAxis>
-                                                <CategoryAxis side="BOTTOM" />
+                                                <NumberAxis />
                                             </xAxis>
                                             <yAxis>
                                                 <NumberAxis side="LEFT" />
@@ -98,10 +130,10 @@
                         </Tab>
                     </tabs>
                 </TabPane>
-                <ListView fx:id="resultListView" layoutX="624.0" layoutY="351.0" prefHeight="287.0" prefWidth="560.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="624.0" AnchorPane.rightAnchor="15.0" />
-                <ScrollPane layoutX="14.0" layoutY="15.0" prefHeight="621.0" prefWidth="597.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
+                <ListView fx:id="resultListView" layoutX="624.0" layoutY="351.0" prefHeight="272.0" prefWidth="611.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="624.0" AnchorPane.rightAnchor="15.0" />
+                <ScrollPane layoutX="14.0" layoutY="15.0" prefHeight="621.0" prefWidth="597.0" stylesheets="@style.css" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
                     <content>
-                        <VBox prefHeight="608.0" prefWidth="563.0">
+                        <VBox prefHeight="608.0" prefWidth="563.0" styleClass="vbox" stylesheets="@style.css">
                             <children>
                                 <Label text="Источник электрического поля:">
                                     <VBox.margin>
@@ -111,30 +143,36 @@
                                         <Font size="18.0" />
                                     </font>
                                 </Label>
-                                <Label text="Диаметр электреда:" />
-                                <TextField fx:id="diametrElectret" text="0.05" />
-                                <Label text="Расстояние между электретами:" />
-                                <TextField fx:id="distanceElectrets" text="0.01" />
-                                <Label text="Заряд электрета:" />
-                                <TextField fx:id="chargeElectret" text="0.00000000000000000016" />
+                                <Label text="Диаметр электреда (м):" />
+                        <ComboBox fx:id="diametrElectret" editable="true" onShowing="#getListDiametrElectret" prefWidth="533.0" promptText="0.05" style="-fx-background-color: gray;" />
+                                <Label text="Расстояние между электретами (м):" />
+                        <ComboBox fx:id="distanceElectrets" editable="true" onShowing="#getListDistanceElectrets" prefWidth="533.0" promptText="0.001" style="-fx-background-color: gray;" />
+                                <Label text="Заряд электрета (Кл):" />
+                        <ComboBox fx:id="chargeElectret" editable="true" onShowing="#getListChargeElectret" prefWidth="533.0" promptText="0.00000000000000000016" style="-fx-background-color: gray;" />
                                 <Label text="Толщина электреда:" />
                                 <TextField disable="true" />
-                                <Label text="Диэлектрическая проницаемость:" />
-                                <TextField fx:id="electretPenetration" text="2.9" />
-                                <Label text="Расстояние до точки между электретами:">
+                                <Label text="Диэлектрическая проницаемость (Ф/м):" />
+                        <ComboBox fx:id="electretPenetration" editable="true" onShowing="#getListElectretPenetration" prefWidth="533.0" promptText="2.9" style="-fx-background-color: gray;" />
+                                <Label text="Расстояние до точки между электретами (м):">
                                     <VBox.margin>
                                         <Insets top="10.0" />
                                     </VBox.margin>
                                 </Label>
-                                <TextField fx:id="distancePointElectret" text="0.1" />
+                        <ComboBox fx:id="distancePointElectret" editable="true" onShowing="#getListDistancePointElectret" prefWidth="533.0" promptText="0.1" style="-fx-background-color: gray;" />
                                 <Separator prefHeight="23.0" prefWidth="446.0">
                                     <VBox.margin>
                                         <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
                                     </VBox.margin>
                                 </Separator>
+                        <Label text="Электрический момент диполя (Кл*м):" />
+                        <ComboBox fx:id="p" editable="true" onShowing="#getP" prefWidth="533.0" promptText="0.00000000000001" style="-fx-background-color: gray;" />
+                        <Label text="Введите длину сенсорного участка (м):" />
+                        <ComboBox fx:id="Lf" editable="true" onShowing="#getLf" prefWidth="533.0" promptText="0.02" style="-fx-background-color: gray;" />
+                        <Label text="Электрострикционный коэффициент:" />
+                        <ComboBox fx:id="M" editable="true" onShowing="#getM" prefWidth="533.0" promptText="0.04" style="-fx-background-color: gray;" />
                                 <Label text="Активный диэлектрик:">
                                     <VBox.margin>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" />
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </VBox.margin>
                                     <font>
                                         <Font size="18.0" />
@@ -181,8 +219,25 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
                 </ScrollPane>
-                <Button fx:id="startModelingButton" layoutX="1120.0" layoutY="664.0" mnemonicParsing="false" onAction="#startModeling" text="Запустить" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
-                <Button fx:id="showModelButton" layoutX="998.0" layoutY="655.0" mnemonicParsing="false" onAction="#showModel" text="Показать модель" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="115.0" />
+                <Button fx:id="startModelingButton" defaultButton="true" layoutX="1120.0" layoutY="664.0" mnemonicParsing="false" onAction="#startModeling" stylesheets="@style.css" text="Запустить" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@image/play.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+                <Button fx:id="showModelButton" cancelButton="true" layoutX="966.0" layoutY="655.0" mnemonicParsing="false" onAction="#showModel" stylesheets="@style.css" text="Показать модель" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="146.0">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/cirkul.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <ProgressIndicator fx:id="progressIndicator" layoutX="656.0" layoutY="645.0" prefHeight="32.0" prefWidth="32.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" />
+            <Label fx:id="loadLabel" layoutX="741.0" layoutY="660.0" text="Загрузка..." visible="false" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="60.0" />
             </children>
         </AnchorPane>
     </children>

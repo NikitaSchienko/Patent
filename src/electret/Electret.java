@@ -17,6 +17,19 @@ public class Electret
 //        this.radiusToDiametr = radiusToDiametr;
 //    }
 
+
+    public static Double force(double p, double e0, double r)
+    {
+        return (6*p*p)/(4*PI*e0*Math.pow(r,4));
+    }
+
+    //Напряженность
+    public static Double tensions(double l, double M, double delta_l)
+    {
+        return Math.sqrt(delta_l/(M*l));
+    }
+
+
     public static Double tensionInPoint(double charge, double E, double R, double d, double x)
     {
         return charge/(2*PI*E*DIELECTRIC_CONSTANT)*((1-(x/(Math.sqrt(R*R+x*x))))+(1-((d-x)/Math.sqrt(R*R+(d-x)*(d-x)))));

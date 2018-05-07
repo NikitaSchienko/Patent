@@ -1,7 +1,12 @@
 package controllers;
 
 
+import database.Procedure;
+import database.ProcedureConstant;
+import database.ProcedureType;
 import electret.Electret;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,20 +15,25 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import reports.Report;
+import singletons.SingletonConstant;
+import singletons.SingletonType;
 
-import javax.swing.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Map;
 
 
 public class Controller
@@ -38,7 +48,7 @@ public class Controller
     private ListView<String> resultListView;
 
     @FXML
-    private TextField distanceElectrets;
+    private ComboBox distanceElectrets;
 
     @FXML
     private TextField fieldDifference;
@@ -47,72 +57,164 @@ public class Controller
     private TextField radiusToDiametr;
 
     @FXML
-    private TextField diametrElectret;
+    private ComboBox diametrElectret;
 
     @FXML
-    private TextField chargeElectret;
+    private ComboBox chargeElectret;
 
     @FXML
-    private TextField distancePointElectret;
+    private ComboBox distancePointElectret;
 
     @FXML
     private LineChart chartOne;
 
     @FXML
-    private TextField electretPenetration;
+    private LineChart chartTwo;
 
+    @FXML
+    private ComboBox electretPenetration;
+
+    @FXML
+    private ProgressIndicator progressIndicator;
+
+    @FXML
+    private Label loadLabel;
+
+
+    @FXML
+    private ComboBox M;
+
+    @FXML
+    private ComboBox Lf;
+
+    @FXML
+    private ComboBox l;
+
+    @FXML
+    private ComboBox p;
+
+    private Procedure procedure;
+
+    @FXML
+    private void initialize() throws SQLException
+    {
+        procedure = new ProcedureConstant();
+
+        diametrElectret.getEditor().setText("0.05");
+        distanceElectrets.getEditor().setText("0.1");
+        chargeElectret.getEditor().setText("0.00000000000000000016");
+        electretPenetration.getEditor().setText("2.9");
+        distancePointElectret.getEditor().setText("0.1");
+        p.getEditor().setText("0.00000000000001");
+        Lf.getEditor().setText("0.02");
+        M.getEditor().setText("0.04");
+
+
+
+
+    }
 
     @FXML
     private void createFileDoc() throws Exception
     {
-        Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("../views/saveModel.fxml"));
-        Scene scene = new Scene(root);
-        stage.setTitle("Сохранить модель");
-        stage.setScene(scene);
-        stage.show();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Создать отчёт");
+
+
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter[]
+                {
+                        new FileChooser.ExtensionFilter("Text Files", new String[]{"*.docx"}),
+                        new FileChooser.ExtensionFilter("DOCX", new String[]{"*.docx"})
+                });
+
+        File file = fileChooser.showSaveDialog(new Stage());
+        //заполнение файла
+
+        Report.saveReport(file);
+        //file.createNewFile();
+        System.out.println(file);
 
     }
 
     @FXML
     private void saveModel() throws Exception
     {
-        Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("../views/saveModel.fxml"));
-        Scene scene = new Scene(root);
-        stage.setTitle("Сохранить модель");
-        stage.setScene(scene);
-        stage.show();
 
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+
+
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter[]
+                {
+                        new FileChooser.ExtensionFilter("Image Files", new String[]{"*.model"}),
+                        new FileChooser.ExtensionFilter("MODEL", new String[]{"*.model"})
+                });
+
+        File file = fileChooser.showSaveDialog(new Stage());
+        //заполнение файла
+        file.createNewFile();
+        System.out.println(file);
     }
 
 
     @FXML
     private void downloadModel(ActionEvent event) throws IOException
     {
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
 
+
+//        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter[]
+//                {
+//                        new FileChooser.ExtensionFilter("Image Files", new String[]{"*.model"}),
+//                        new FileChooser.ExtensionFilter("MODEL", new String[]{"*.model"})
+//                });
+
         File file = fileChooser.showOpenDialog(new Stage());
-
+        //заполнение файла
+        //file.createNewFile();
         System.out.println(file);
-
-
     }
 
-    private void drawGraphic(double q, double E, double R, double d)
+    private void drawGraphicTwo()
     {
         XYChart.Series series = new XYChart.Series();
 
-        series.setName("Отношение E к d");
+        series.setName("Отношение delta_l к E");
 
 
-        for(double i = 0; i < d; i+=d/30)
+        double Lf_double = Double.valueOf(Lf.getEditor().getText());
+        double l_double = Double.valueOf(distanceElectrets.getEditor().getText());
+        double M_double = Double.valueOf(M.getEditor().getText());
+
+        double max_Lf = 0.01*Lf_double;
+
+        for(double i = 0; i <= 20; i++)
         {
-            double EE = Electret.tensionInPoint(q,E,R,d,i);
+            double E = Electret.tensions(l_double, M_double, max_Lf*i/20);
+            series.getData().add(new XYChart.Data(E,max_Lf/20*i));
+        }
 
-            series.getData().add(new XYChart.Data(String.valueOf(i),EE));
+        chartTwo.getYAxis().setLabel("Дельта l");
+        chartTwo.getXAxis().setLabel("Напряженность, E");
+
+        chartTwo.getData().add(series);
+
+        chartTwo.setTitle("Отношение delta_l к E");
+    }
+
+    private void drawGraphicOne(double q, double E, double R, double d)
+    {
+        XYChart.Series series = new XYChart.Series();
+
+        series.setName("Отношение delta_l к E");
+
+
+        for(double i = 0; i <= 20; i++)
+        {
+            double EE = Electret.tensionInPoint(q,E,R,d,d/20*i);
+
+            series.getData().add(new XYChart.Data(d/20*i,EE));
         }
 
         chartOne.getXAxis().setLabel("Расстояние до точки, x, м.");
@@ -127,8 +229,13 @@ public class Controller
     public void showLibrary() throws IOException
     {
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(Controller.class.getResource("../views/library.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/library.fxml"));
+        Parent root = loader.load();
+        Library library = loader.getController();
+        library.setProgressIndicator(progressIndicator);
+        //Parent root = FXMLLoader.load(Controller.class.getResource("../views/library.fxml"));
         Scene scene = new Scene(root);
+        stage.getIcons().add(new Image("views/image/books.png"));
         stage.setTitle("Библиотека");
         stage.setScene(scene);
         stage.show();
@@ -139,7 +246,10 @@ public class Controller
     public void showModel() throws IOException
     {
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("../views/model.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/model.fxml"));
+        Parent root = loader.load();
+
+        //Parent root = FXMLLoader.load(getClass().getResource("../views/model.fxml"));
         Scene scene = new Scene(root);
         stage.setTitle("Модель датчика");
         stage.setScene(scene);
@@ -151,37 +261,46 @@ public class Controller
     {
         resultListView.getItems().clear();
         chartOne.getData().clear();
+        chartTwo.getData().clear();
         //double q = 0.00000000000000000016;
 
-        if(checkParameters())
-        {
+//        if(checkParameters())
+//        {
 
             double E = Electret.tensionInPoint(
-                    Double.valueOf(chargeElectret.getText()),
-                    Double.valueOf(electretPenetration.getText()),
-                    Double.valueOf(diametrElectret.getText())/2,
-                    Double.valueOf(distanceElectrets.getText()),
-                    Double.valueOf(distancePointElectret.getText())
-            );
+                    Double.valueOf(chargeElectret.getEditor().getText()),
+                    Double.valueOf(electretPenetration.getEditor().getText()),
+                    Double.valueOf(diametrElectret.getEditor().getText())/2,
 
-            drawGraphic(Double.valueOf(chargeElectret.getText()),
-                    Double.valueOf(electretPenetration.getText()),
-                            Double.valueOf(diametrElectret.getText())/2,
-                    Double.valueOf(distancePointElectret.getText()));
+                    Double.valueOf(distanceElectrets.getEditor().getText()),
+                    Double.valueOf(distancePointElectret.getEditor().getText())
+            );
+            double F = Electret.force(Double.valueOf(p.getEditor().getText()),
+                    Double.valueOf(electretPenetration.getEditor().getText()),
+                    Double.valueOf(distanceElectrets.getEditor().getText()));
+
+            drawGraphicOne(Double.valueOf(chargeElectret.getEditor().getText()),
+                    Double.valueOf(electretPenetration.getEditor().getText()),
+                            Double.valueOf(diametrElectret.getEditor().getText())/2,
+                    Double.valueOf(distanceElectrets.getEditor().getText()));
+
+            drawGraphicTwo();
+
 
             resultListView.getItems().add("E = "+E);
+            resultListView.getItems().add("F = "+F);
 //            resultListView.getItems().add("R = " + electret.radius() + " м");
 //            resultListView.getItems().add("Delta = " + electret.difference() * 100 + "%");
-        }
-        else
-        {
-            resultListView.getItems().add("Некорректные параметры");
-        }
+//        }
+//        else
+//        {
+//            resultListView.getItems().add("Некорректные параметры");
+//        }
     }
 
 
 
-    private boolean checkParameters()
+    /*private boolean checkParameters()
     {
 
         chargeElectret.setStyle("-fx-text-box-border: silver;");
@@ -193,7 +312,7 @@ public class Controller
         boolean check = true;
         try
         {
-            double chargeElectret = Double.valueOf(this.chargeElectret.getText());
+            double chargeElectret = Double.valueOf(this.chargeElectret.getSelectionModel().getSelectedItem().toString());
 
         }
         catch (Exception e)
@@ -203,7 +322,7 @@ public class Controller
         }
         try
         {
-            if(Double.valueOf(distanceElectrets.getText()) <= 0)
+            if(Double.valueOf(distanceElectrets.getSelectionModel().getSelectedItem().toString()) <= 0)
             {
                 distanceElectrets.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                 check = false;
@@ -217,7 +336,7 @@ public class Controller
 
         try
         {
-            if (Double.valueOf(diametrElectret.getText()) <= 0) {
+            if (Double.valueOf(diametrElectret.getSelectionModel().getSelectedItem().toString()) <= 0) {
                 diametrElectret.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                 check = false;
             }
@@ -230,7 +349,7 @@ public class Controller
         }
         try
         {
-            if (Double.valueOf(distancePointElectret.getText()) <= 0)
+            if (Double.valueOf(distancePointElectret.getSelectionModel().getSelectedItem().toString()) <= 0)
             {
                 distancePointElectret.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
                 check = false;
@@ -244,7 +363,7 @@ public class Controller
 
         try
         {
-            if (Double.valueOf(electretPenetration.getText()) <= 0)
+            if (Double.valueOf(electretPenetration.getSelectionModel().getSelectedItem().toString()) <= 0)
             {
                 electretPenetration.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
                 check = false;
@@ -257,6 +376,78 @@ public class Controller
         }
 
         return check;
+    }*/
+
+
+    @FXML
+    public void getListDiametrElectret() throws SQLException
+    {
+
+        Map mapConstant = procedure.selectRecords(1000);
+
+        ObservableList<Object> observableList = FXCollections.observableArrayList(mapConstant.values().toArray());
+
+        diametrElectret.setItems(observableList);
     }
 
+
+    @FXML
+    public  void getListDistanceElectrets() throws SQLException
+    {
+        Map mapConstant = procedure.selectRecords(1001);
+
+        ObservableList<Object> observableList = FXCollections.observableArrayList(mapConstant.values().toArray());
+
+        distanceElectrets.setItems(observableList);
+    }
+
+
+    @FXML
+    public void getListChargeElectret() throws SQLException
+    {
+        Map mapConstant = procedure.selectRecords(1002);
+        ObservableList<Object> observableList = FXCollections.observableArrayList(mapConstant.values().toArray());
+        chargeElectret.setItems(observableList);
+    }
+
+    @FXML
+    public void getListElectretPenetration() throws  SQLException
+    {
+        Map mapConstant = procedure.selectRecords(1003);
+        ObservableList<Object> observableList = FXCollections.observableArrayList(mapConstant.values().toArray());
+        electretPenetration.setItems(observableList);
+    }
+
+    @FXML
+    public void getListDistancePointElectret() throws SQLException
+    {
+        Map mapConstant = procedure.selectRecords(1004);
+        ObservableList<Object> observableList = FXCollections.observableArrayList(mapConstant.values().toArray());
+        distancePointElectret.setItems(observableList);
+    }
+
+    @FXML
+    public void getM() throws SQLException
+    {
+        Map mapConstant = procedure.selectRecords(1007);
+        ObservableList<Object> observableList = FXCollections.observableArrayList(mapConstant.values().toArray());
+        M.setItems(observableList);
+    }
+
+
+    @FXML
+    public void getLf() throws SQLException
+    {
+        Map mapConstant = procedure.selectRecords(1006);
+        ObservableList<Object> observableList = FXCollections.observableArrayList(mapConstant.values().toArray());
+        Lf.setItems(observableList);
+    }
+
+    @FXML
+    public void getP() throws SQLException
+    {
+        Map mapConstant = procedure.selectRecords(1005);
+        ObservableList<Object> observableList = FXCollections.observableArrayList(mapConstant.values().toArray());
+        p.setItems(observableList);
+    }
 }
