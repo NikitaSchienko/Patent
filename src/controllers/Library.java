@@ -13,6 +13,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -70,6 +71,7 @@ public class Library
 
         Scene scene = new Scene(root);
         stage.setTitle("Редактировать константу");
+        stage.getIcons().add(new Image("views/image/pen.png"));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.show();
@@ -106,6 +108,7 @@ public class Library
         Scene scene = new Scene(root);
 
         stage.setTitle("Добавить константу");
+        stage.getIcons().add(new Image("views/image/pen.png"));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.show();

@@ -115,6 +115,39 @@ public class Controller
     }
 
     @FXML
+    private void clearAllField()
+    {
+        ButtonType no = new ButtonType("Нет", ButtonBar.ButtonData.NO);
+        ButtonType yes = new ButtonType("Да", ButtonBar.ButtonData.YES);
+
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Вы действительно хотите очистить все поля ввода?", yes, no);
+
+        alert.setTitle("Очистка");
+
+        alert.setHeaderText(null);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("views/image/clear.png"));
+        alert.showAndWait();
+
+        if (alert.getResult().getText().equals("Да"))
+        {
+            diametrElectret.getEditor().setText("");
+            distanceElectrets.getEditor().setText("");
+            chargeElectret.getEditor().setText("");
+            electretPenetration.getEditor().setText("");
+            distancePointElectret.getEditor().setText("");
+            p.getEditor().setText("");
+            Lf.getEditor().setText("");
+            M.getEditor().setText("");
+
+            resultListView.getItems().clear();
+            chartOne.getData().clear();
+            chartTwo.getData().clear();
+        }
+    }
+
+    @FXML
     private void createFileDoc() throws Exception
     {
         FileChooser fileChooser = new FileChooser();
