@@ -10,33 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01a523ba-1cc7-45dd-b53e-4a3c05320fea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/help/help.chm" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/views/image/patent.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_itextpdf_itextpdf_5_5_10.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_oracle_ojdbc14_10_2_0_3_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_pdfbox_fontbox_2_0_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_pdfbox_pdfbox_2_0_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bouncycastle_bcprov_jdk15on_1_56.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/controllers/ControllerOutputMode.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/electret/FormulasOutputMode.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/pojo/ModelOutputMode.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/views/outputMode.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Patent.jar" afterPath="$PROJECT_DIR$/Patent.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Patent.iml" afterPath="$PROJECT_DIR$/.idea/Patent.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Test.java" afterPath="$PROJECT_DIR$/src/Test.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/controllers/Controller.java" afterPath="$PROJECT_DIR$/src/controllers/Controller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/controllers/Model.java" afterPath="$PROJECT_DIR$/src/controllers/Model.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/electret/Electret.java" afterPath="$PROJECT_DIR$/src/electret/Electret.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/models/InputDateModel.java" afterPath="$PROJECT_DIR$/src/models/InputDateModel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/models/OutputDateModel.java" afterPath="$PROJECT_DIR$/src/models/OutputDateModel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/reports/Report.java" afterPath="$PROJECT_DIR$/src/reports/Report.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/inputMode.fxml" afterPath="$PROJECT_DIR$/src/views/inputMode.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/model.fxml" afterPath="$PROJECT_DIR$/src/views/model.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/style.css" afterPath="$PROJECT_DIR$/src/views/style.css" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -661,7 +635,7 @@
       <workItem from="1526726872701" duration="67213000" />
       <workItem from="1526922113823" duration="9470000" />
       <workItem from="1526974540579" duration="1759000" />
-      <workItem from="1526993097384" duration="159000" />
+      <workItem from="1526993097384" duration="284000" />
     </task>
     <task id="LOCAL-00001" summary="ffff">
       <created>1524556824451</created>
@@ -698,11 +672,18 @@
       <option name="project" value="LOCAL" />
       <updated>1525955390009</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="New button clear">
+      <created>1526993324559</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1526993324559</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="433648000" />
+    <option name="totallyTimeSpent" value="433773000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1859" height="1098" extended-state="6" />
