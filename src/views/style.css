@@ -174,13 +174,14 @@
     -fx-border-radius: 0 5 5 0;
 }
 
-.chart-line-symbol
-{
-    -fx-background-color: transparent;
-}
 
 
-.chart-legend-item-symbol
+
+
+.canvas
 {
-    -fx-background-color: orange;
+    -fx-background-color: blue;
+    -fx-border-color: red;
+    -fx-border-width: 2px;
 }
+

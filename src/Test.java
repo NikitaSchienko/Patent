@@ -33,8 +33,8 @@ public class Test
     {
         InputDateModel inputDateModel = new InputDateModel();
 
-        inputDateModel.setTest(123.0);
-        inputDateModel.setTest2(111.0);
+//        inputDateModel.setTest(123.0);
+//        inputDateModel.setTest2(111.0);
 
         try
         {
