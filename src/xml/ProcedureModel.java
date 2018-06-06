@@ -10,7 +10,7 @@ import java.io.File;
 
 public class ProcedureModel
 {
-    private static void save(String path, InputDateModel inputDateModel)
+    public static void save(String path, InputDateModel inputDateModel)
     {
         try
         {
@@ -30,7 +30,7 @@ public class ProcedureModel
         }
     }
 
-    private static InputDateModel load(String path)
+    public static InputDateModel load(String path)
     {
         InputDateModel inputDateModel = null;
         try

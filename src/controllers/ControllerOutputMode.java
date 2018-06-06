@@ -1,11 +1,15 @@
 package controllers;
 
+
+import com.sun.deploy.ui.ProgressDialog;
 import database.Procedure;
 import database.ProcedureConstant;
 import electret.Electret;
 import electret.FormulasOutputMode;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +22,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.InputDateModel;
 import pojo.ModelOutputMode;
@@ -30,12 +35,101 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 
 public class ControllerOutputMode
 {
+    public ObservableList getObservableList() {
+        return observableList;
+    }
+
+    public ComboBox getdComboBox() {
+        return dComboBox;
+    }
+
+    public ComboBox getEpsilonComboBox() {
+        return EpsilonComboBox;
+    }
+
+    public ComboBox getpComboBox() {
+        return pComboBox;
+    }
+
+    public ComboBox getLamdaResultComboBox() {
+        return lamdaResultComboBox;
+    }
+
+    public ComboBox getLamdaComboBox() {
+        return lamdaComboBox;
+    }
+
+    public ComboBox getMComboBox() {
+        return MComboBox;
+    }
+
+    public ComboBox getNeffComboBox() {
+        return neffComboBox;
+    }
+
+    public TableColumn getColumnGraphic() {
+        return columnGraphic;
+    }
+
+    public TableColumn getColumnNumber() {
+        return columnNumber;
+    }
+
+    public TableColumn getColumnF() {
+        return columnF;
+    }
+
+    public TableColumn getColumnU() {
+        return columnU;
+    }
+
+    public TableColumn getColumnl1() {
+        return columnl1;
+    }
+
+    public TableColumn getColumnl2() {
+        return columnl2;
+    }
+
+    public TableColumn getColumnl3() {
+        return columnl3;
+    }
+
+    public TableColumn getColumnR() {
+        return columnR;
+    }
+
+    public TableColumn getColumnL() {
+        return columnL;
+    }
+
+    public TableColumn getColumnE() {
+        return columnE;
+    }
+
+    public TableColumn getColumnu() {
+        return columnu;
+    }
+
+    public TableView getTableResult() {
+        return tableResult;
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
     private ObservableList observableList;
 
-    private Double EPSILON_CONST = 0.5;
+    private Double EPSILON_CONST = 0.00000001;
+
+    @FXML
+    private ProgressBar progressBar;
 
     @FXML
     private Button startModelingButton;
@@ -50,7 +144,7 @@ public class ControllerOutputMode
     private TableColumn columnu;
 
     @FXML
-    private ProgressIndicator progressIndicator;
+    private ProgressBar progress;
 
     @FXML
     private Label loadLabel;
@@ -123,17 +217,21 @@ public class ControllerOutputMode
 
     private Procedure procedure;
 
+
     @FXML
     private void initialize() throws SQLException
     {
+
+
         dComboBox.getEditor().setText("0.05");
         neffComboBox.getEditor().setText("0.4447");
         pComboBox.getEditor().setText("2.2E-30");
         EpsilonComboBox.getEditor().setText("0.02");
         MComboBox.getEditor().setText("0.04");
-        lamdaResultComboBox.getEditor().setText("2.5E-10");
-        lamdaComboBox.getEditor().setText("2.1E-9");
-
+//        lamdaResultComboBox.getEditor().setText("2.5E-10");
+//        lamdaComboBox.getEditor().setText("2.1E-9");
+        lamdaResultComboBox.getEditor().setText("0.0019358980000022826");
+        lamdaComboBox.getEditor().setText("0.001935898");
     }
 
     @FXML
@@ -229,7 +327,7 @@ public class ControllerOutputMode
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/library.fxml"));
         Parent root = loader.load();
         Library library = loader.getController();
-        library.setProgressIndicator(progressIndicator);
+        //library.setProgressIndicator(progressIndicator);
         //Parent root = FXMLLoader.load(Controller.class.getResource("../views/library.fxml"));
         Scene scene = new Scene(root);
         stage.getIcons().add(new Image("views/image/books.png"));
@@ -300,12 +398,15 @@ public class ControllerOutputMode
 //        stage.show();
     }
 
-    @FXML
-    public void startModeling()
+    class TestThread implements Runnable
     {
-        tableResult.getItems().clear();
 
-        Random random = new Random();
+        @Override
+        public void run()
+        {
+            progressBar.setVisible(true);
+            progressBar.setProgress(0);
+                    Random random = new Random();
 
         double p_ = Double.valueOf(pComboBox.getEditor().getText());
         double eps = Double.valueOf(EpsilonComboBox.getEditor().getText());
@@ -320,33 +421,39 @@ public class ControllerOutputMode
 
         double resE = Math.sqrt(FormulasOutputMode.deformation(lamda1,lamda2)/M);
 
-        for(int i = 0; i < 100; i++)
+        for(int i = 0; i < 100000; i++)
         {
+            double progress = i/100000.0;
+            progressBar.setProgress(progress);
+
+
             double R = (double) (random.nextInt(300) + 100) / 100000;
             double l1 = (double) (random.nextInt(100) + 10) / 100000;
-            double l2 = (double) (random.nextInt(300) + 500) / 100000;
-            double l3 = (double) (random.nextInt(200) + 50) / 100000;
+            double l3 = (double) (random.nextInt(300) + 500) / 100000;
+            double l2 = (double) (random.nextInt(200) + 50) / 100000;
             double U = (double) (random.nextInt(800) + 100) / 10;
 
-            double E = Electret.tension(R, eps, l2/2, l1, l2, l3, p_, U);
+            double E = Electret.tension(R, eps, l3/2, l1, l3, l2, p_, U);
 
 
 
-//            System.out.println("R = " + R);
-//            System.out.println("l1 = " + l1);
-//            System.out.println("l2 = " + l2);
-//            System.out.println("l3 = " + l3);
-//
-//            System.out.println("F="+F);
-//            System.out.println("l="+l);
 
-            System.out.println("E = "+E+" and resE = "+resE);
+            System.out.println("R = " + R);
+            System.out.println("l1 = " + l1);
+            System.out.println("l2 = " + l2);
+            System.out.println("l3 = " + l3);
+
+            //System.out.println("F="+F);
+            //System.out.println("l="+l);
+
+
             if(Math.abs(E-resE)<EPSILON_CONST)
             {
+                System.out.println("E = "+E+" and resE = "+resE);
                 double l = FormulasOutputMode.deltaL(M,E,l2);
                 double F = FormulasOutputMode.force(eps,E,d);
                 double u = FormulasOutputMode.deformation(lamda1,lamda2);
-
+                System.out.println("u1 = "+u+" u2 ="+(M*E*E));
                 ModelOutputMode modelOutputMode = new ModelOutputMode(i + 1, l1, l2, l3, R, U, l, E, F, u, new CheckBox());
                 arrayList.add(modelOutputMode);
             }
@@ -366,9 +473,101 @@ public class ControllerOutputMode
         columnU.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("U"));
         columnR.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("R"));
         columnL.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("l"));
-        columnu.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("u"));
+        columnu.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("deformation"));
 
         tableResult.setItems(observableList);
+        progressBar.setVisible(false);
+
+        }
+
+    }
+
+
+    @FXML
+    public void startModeling()
+    {
+//        Thread thread =  new Thread(new ThreadClass(progress, true));
+//        thread.start();
+//        new Thread(new ThreadController(this, thread)).start();
+
+        tableResult.getItems().clear();
+
+        Thread thread = new Thread(new TestThread());
+        thread.start();
+
+
+
+
+
+
+
+//        Random random = new Random();
+//
+//        double p_ = Double.valueOf(pComboBox.getEditor().getText());
+//        double eps = Double.valueOf(EpsilonComboBox.getEditor().getText());
+//        double lamda1 = Double.valueOf(lamdaComboBox.getEditor().getText());
+//        double lamda2 = Double.valueOf(lamdaResultComboBox.getEditor().getText());
+//        double d = Double.valueOf(dComboBox.getEditor().getText());
+//        double M = Double.valueOf(MComboBox.getEditor().getText());
+//        double neff = Double.valueOf(neffComboBox.getEditor().getText());
+//        double period = FormulasOutputMode.periodVBR(lamda1,neff);
+//
+//        ArrayList<ModelOutputMode> arrayList = new ArrayList<ModelOutputMode>();
+//
+//        double resE = Math.sqrt(FormulasOutputMode.deformation(lamda1,lamda2)/M);
+//
+//        for(int i = 0; i < 100000; i++)
+//        {
+//
+//            double R = (double) (random.nextInt(300) + 100) / 100000;
+//            double l1 = (double) (random.nextInt(100) + 10) / 100000;
+//            double l2 = (double) (random.nextInt(300) + 500) / 100000;
+//            double l3 = (double) (random.nextInt(200) + 50) / 100000;
+//            double U = (double) (random.nextInt(800) + 100) / 10;
+//
+//            double E = Electret.tension(R, eps, l2/2, l1, l2, l3, p_, U);
+//
+//
+//
+//
+//            System.out.println("R = " + R);
+//            System.out.println("l1 = " + l1);
+//            System.out.println("l2 = " + l2);
+//            System.out.println("l3 = " + l3);
+//
+//            //System.out.println("F="+F);
+//            //System.out.println("l="+l);
+//
+//
+//            if(Math.abs(E-resE)<EPSILON_CONST)
+//            {
+//                System.out.println("E = "+E+" and resE = "+resE);
+//                double l = FormulasOutputMode.deltaL(M,E,l2);
+//                double F = FormulasOutputMode.force(eps,E,d);
+//                double u = FormulasOutputMode.deformation(lamda1,lamda2);
+//                System.out.println("u1 = "+u+" u2 ="+(M*E*E));
+//                ModelOutputMode modelOutputMode = new ModelOutputMode(i + 1, l1, l2, l3, R, U, l, E, F, u, new CheckBox());
+//                arrayList.add(modelOutputMode);
+//            }
+//
+//        }
+//
+//        observableList = FXCollections.observableArrayList(arrayList);
+//
+//
+//        columnGraphic.setCellValueFactory(new PropertyValueFactory<ModelOutputMode,CheckBox>("check"));
+//        columnNumber.setCellValueFactory(new PropertyValueFactory<ModelOutputMode,Integer>("number"));
+//        columnE.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("E"));
+//        columnl1.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("l1"));
+//        columnl2.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("l2"));
+//        columnl3.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("l3"));
+//        columnF.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("F"));
+//        columnU.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("U"));
+//        columnR.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("R"));
+//        columnL.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("l"));
+//        columnu.setCellValueFactory(new PropertyValueFactory<ModelOutputMode, Double>("deformation"));
+//
+//        tableResult.setItems(observableList);
 
     }
 
@@ -386,7 +585,7 @@ public class ControllerOutputMode
         for(double i = 0; i <= E; i+=E/20)
         {
             double delta = Electret.delta_l(l2,M,i);
-            series.getData().add(new XYChart.Data(i/Math.pow(10,9),delta/Math.pow(10,24)));
+            series.getData().add(new XYChart.Data(i*Math.pow(10,9),delta*Math.pow(10,24)));
         }
 
         chartTwo.getYAxis().setLabel("Удлинение релаксора l, им");
@@ -436,11 +635,11 @@ public class ControllerOutputMode
         for(double i = 0; i <= E; i+=E/20)
         {
             double u = Electret.deformation(M,i);
-            series.getData().add(new XYChart.Data(i*Math.pow(10,9),u*Math.pow(10,21)));
+            series.getData().add(new XYChart.Data(i*Math.pow(10,9),u*Math.pow(10,12)));
         }
 
         chartThree.getXAxis().setLabel("Напряженность, E, нВ/м");
-        chartThree.getYAxis().setLabel("Деформация, u, 10ˉ²¹");
+        chartThree.getYAxis().setLabel("Деформация, u, 10ˉ¹²");
         chartThree.getData().add(series);
 
         chartThree.setTitle("Отношение E к u");
@@ -572,13 +771,15 @@ public class ControllerOutputMode
         double neff = Double.valueOf(neffComboBox.getEditor().getText());
         double period = FormulasOutputMode.periodVBR(lamda1,neff);
 
+
         double R = selectRow.getR();
         double l1 = selectRow.getL1();
-        double l2 = selectRow.getL2();
-        double l3 = selectRow.getL3();
+        double l3 = selectRow.getL2();
+        double l2 = selectRow.getL3();
         double U = selectRow.getU();
 
-
+        double E = Electret.tension(R,eps,l3/2,l1,l2,l3,p_,U);
+        System.out.println("uuuuuu = "+Electret.deformation(M,E));
 
         InputDateModel inputDateModel = new InputDateModel();
 

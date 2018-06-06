@@ -8,6 +8,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import pojo.DataRoport;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -18,7 +19,7 @@ import java.util.Date;
 
 public class Report
 {
-    public static void saveReport(File file, InputDateModel inputDateModel, String img) throws IOException, InvalidFormatException, DocumentException, URISyntaxException {
+    public static void saveReport(DataRoport dataRoport, File file, InputDateModel inputDateModel, String nameChartOne, String nameChartTwo, String nameChartThree, String nameChartFour, String nameChartFive) throws IOException, InvalidFormatException, DocumentException, URISyntaxException {
 
 
 
@@ -39,29 +40,85 @@ public class Report
         stringBuilder.append("Дата моделирования: "+getCurrentDate());
         stringBuilder.append("\n");
         stringBuilder.append("\n");
-        stringBuilder.append("Характеристики датчика:");
+        stringBuilder.append("Параметры моделирования: ");
         stringBuilder.append("\n");
-        stringBuilder.append(" – Диаметр датчика: "+inputDateModel.getD());
+        stringBuilder.append("Диаметр кабеля: "+dataRoport.getdCabel());
         stringBuilder.append("\n");
-        stringBuilder.append(" – Диаметр электрета: "+inputDateModel.getdElectret());
+        stringBuilder.append("Деформация: "+dataRoport.getDeformation());
         stringBuilder.append("\n");
-        stringBuilder.append(" – Толщина электрета: "+inputDateModel.getL1());
+        stringBuilder.append("Напряженность: "+dataRoport.getE());
         stringBuilder.append("\n");
-        stringBuilder.append(" – Толщина электрода: "+inputDateModel.getL3());
+        stringBuilder.append("Диэлектрическая проницаемость: "+dataRoport.getEps());
         stringBuilder.append("\n");
-        stringBuilder.append(" – Расстояние между электретами: "+inputDateModel.getL2());
+        stringBuilder.append("Ошибка: "+dataRoport.getError());
         stringBuilder.append("\n");
+        stringBuilder.append("Сила взаимодействия электретов: "+dataRoport.getF());
         stringBuilder.append("\n");
-        stringBuilder.append("Модель датчика:");
+        stringBuilder.append("Регистрируемая сила:"+dataRoport.getFmax());
         stringBuilder.append("\n");
+        stringBuilder.append("Толщина электрода: "+dataRoport.getL1());
         stringBuilder.append("\n");
-        Image img1 = Image.getInstance(img);
+        stringBuilder.append("Длина релаксора: "+dataRoport.getL2());
+        stringBuilder.append("\n");
+        stringBuilder.append("Толщина электрета: "+dataRoport.getL3());
+        stringBuilder.append("\n");
+        stringBuilder.append("Напряжение: "+dataRoport.getU());
+        stringBuilder.append("\n");
+        stringBuilder.append("Радиус электрета: "+dataRoport.getR());
+        stringBuilder.append("\n");
+        stringBuilder.append("Плотность дипольного момента: "+dataRoport.getP_());
+        stringBuilder.append("\n");
+        stringBuilder.append("Диаметр кабеля: "+dataRoport.getP());
+        stringBuilder.append("\n");
+        stringBuilder.append("Электрострикционный коэффициент:"+dataRoport.getM());
+        stringBuilder.append("\n");
+        stringBuilder.append("Длина измеряемого участка: "+dataRoport.getLf());
+        stringBuilder.append("\n");
+        stringBuilder.append("Длина волны: "+dataRoport.getLamda());
+        stringBuilder.append("\n");
+        stringBuilder.append("Длина отраженной волны: "+dataRoport.getLamdaRes());
+        stringBuilder.append("\n");
+        stringBuilder.append("Период решетки: "+dataRoport.getPeriod());
+        stringBuilder.append("\n");
+        stringBuilder.append("Диаметр кабеля: "+dataRoport.getNeff());
 
-        img1.scaleToFit(500,500);
+
+        stringBuilder.append("\n");
+        stringBuilder.append("\n");
+        stringBuilder.append("График:");
+        stringBuilder.append("\n");
+        stringBuilder.append("\n");
+
+        Image imgChartOne = Image.getInstance(nameChartOne);
+        Image imgChartTwo = Image.getInstance(nameChartTwo);
+        Image imgChartThree = Image.getInstance(nameChartThree);
+        Image imgChartFour = Image.getInstance(nameChartFour);
+        Image imgChartFive = Image.getInstance(nameChartFive);
+
+        Image imgPatent = Image.getInstance("src/views/image/patent.png");
+
+        imgChartOne.scaleToFit(200,200);
+        imgChartTwo.scaleToFit(200,200);
+        imgChartThree.scaleToFit(200,200);
+        imgChartFour.scaleToFit(200,200);
+        imgChartFive.scaleToFit(300,300);
 
 
         document.add(new Paragraph(stringBuilder.toString(), font));
-        document.add(img1);
+//        document.add(imgChartOne);
+//        document.add(imgChartTwo);
+//        document.add(imgChartThree);
+//        document.add(imgChartFour);
+        document.add(imgChartFive);
+
+        stringBuilder.append("\n");
+        stringBuilder.append("\n");
+        stringBuilder.append("Модель датчика:");
+
+        imgPatent.scaleToFit(500,500);
+
+
+        document.add(imgPatent);
         document.close();
 
 //        XWPFDocument document = new XWPFDocument();

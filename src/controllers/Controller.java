@@ -30,9 +30,11 @@ import models.InputDateModel;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import pojo.DataRoport;
 import reports.Report;
 import singletons.SingletonConstant;
 import singletons.SingletonType;
+import xml.ProcedureModel;
 
 
 import javax.imageio.ImageIO;
@@ -78,14 +80,12 @@ public class Controller
     @FXML
     private LineChart chartFive;
 
-    @FXML
-    private LineChart chartSix;
 
     @FXML
     private ComboBox epsilonComboBox;
 
     @FXML
-    private ProgressIndicator progressIndicator;
+    private ProgressBar progress;
 
     @FXML
     private Label loadLabel;
@@ -121,6 +121,7 @@ public class Controller
     @FXML
     private ComboBox neffComboBox;
 
+    private DataRoport dataRoport;
 
     @FXML
     private LineChart chartFour;
@@ -135,6 +136,8 @@ public class Controller
         inputDateModel = new InputDateModel();
         procedure = new ProcedureConstant();
 
+        dataRoport = new DataRoport();
+
         dElectretComboBox.getEditor().setText("0.025");
         epsilonComboBox.getEditor().setText("2.9");
         l2ComboBox.getEditor().setText("0.02");
@@ -147,7 +150,6 @@ public class Controller
         LfComboBox.getEditor().setText("0.075");
         neffComboBox.getEditor().setText("1.4447");
         periodComboBox.getEditor().setText("6.7E-4");
-
     }
 
     public void setParameters(InputDateModel inputDateModel)
@@ -164,6 +166,8 @@ public class Controller
         LfComboBox.getEditor().setText(String.valueOf(inputDateModel.getLf()));
         neffComboBox.getEditor().setText(String.valueOf(inputDateModel.getNeff()));
         periodComboBox.getEditor().setText(String.valueOf(inputDateModel.getPeriod()));
+
+        startModeling();
     }
 
     @FXML
@@ -198,11 +202,12 @@ public class Controller
             neffComboBox.getEditor().setText("");
             periodComboBox.getEditor().setText("");
             resultListView.getItems().clear();
+
             chartOne.getData().clear();
             chartTwo.getData().clear();
             chartFive.getData().clear();
             chartFour.getData().clear();
-            chartSix.getData().clear();
+            chartThree.getData().clear();
         }
     }
 
@@ -215,24 +220,53 @@ public class Controller
 
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter[]
                 {
-                        new FileChooser.ExtensionFilter("Text Files", new String[]{"*.docx"}),
-                        new FileChooser.ExtensionFilter("DOCX", new String[]{"*.docx"}),
+                        new FileChooser.ExtensionFilter("Text Files", new String[]{"*.pdf"}),
                         new FileChooser.ExtensionFilter("PDF", new String[]{"*.pdf"})
                 });
 
+
+
         File file = fileChooser.showSaveDialog(new Stage());
         //заполнение файла
-        WritableImage image = chartOne.snapshot(new SnapshotParameters(), null);
-        File file1 = new File("chart.png");
 
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file1);
-        } catch (IOException e) {
+        WritableImage imageChartOne = chartOne.snapshot(new SnapshotParameters(), null);
+        File fileChartOne = new File("chartOne.png");
+
+        WritableImage imageChartTwo = chartTwo.snapshot(new SnapshotParameters(), null);
+        File fileChartTwo = new File("chartTwo.png");
+
+        WritableImage imageChartThree = chartThree.snapshot(new SnapshotParameters(), null);
+        File fileChartThree = new File("chartThree.png");
+
+        WritableImage imageChartFour = chartFour.snapshot(new SnapshotParameters(), null);
+        File fileChartFour = new File("chartFour.png");
+
+        WritableImage imageChartFive = chartFive.snapshot(new SnapshotParameters(), null);
+        File fileChartFive = new File("chartFive.png");
+
+        try
+        {
+            ImageIO.write(SwingFXUtils.fromFXImage(imageChartOne, null), "png", fileChartOne);
+            ImageIO.write(SwingFXUtils.fromFXImage(imageChartTwo, null), "png", fileChartTwo);
+            ImageIO.write(SwingFXUtils.fromFXImage(imageChartThree, null), "png", fileChartThree);
+            ImageIO.write(SwingFXUtils.fromFXImage(imageChartFour, null), "png", fileChartFour);
+            ImageIO.write(SwingFXUtils.fromFXImage(imageChartFive, null), "png", fileChartFive);
+        }
+        catch (IOException e)
+        {
             // TODO: handle exception here
         }
-        Report.saveReport(file, inputDateModel, "chart.png");
+        Report.saveReport(dataRoport, file, inputDateModel, "chartOne.png","chartTwo.png","chartThree.png","chartFour.png", "chartFive.png");
         //file.createNewFile();
         System.out.println(file);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        alert.setTitle("Успешно!");
+        alert.setHeaderText(null);
+        alert.setContentText("Файл "+file.getName()+" – успешно создан!");
+
+        alert.showAndWait();
 
     }
 
@@ -252,8 +286,16 @@ public class Controller
 
         File file = fileChooser.showSaveDialog(new Stage());
         //заполнение файла
-        file.createNewFile();
+        ProcedureModel.save(file.getPath(), inputDateModel);
         System.out.println(file);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        alert.setTitle("Успешно!");
+        alert.setHeaderText(null);
+        alert.setContentText("Модель "+file.getName()+" – успешно сохранена!");
+
+        alert.showAndWait();
     }
 
 
@@ -274,7 +316,13 @@ public class Controller
         //заполнение файла
         //file.createNewFile();
         System.out.println(file);
+
+        setParameters(ProcedureModel.load(file.getPath()));
+
+
     }
+
+
 
     private void drawGraphicTwo(double U,double p_, double eps, double R, double l1, double l2, double l3, double M)
     {
@@ -321,27 +369,9 @@ public class Controller
         chartOne.setTitle("Отношение E к d");
     }
 
-    private void drawGraphicThree(double l2, double R)
-    {
-        XYChart.Series series = new XYChart.Series();
-
-        series.setName("Отношение x к ошибке");
 
 
-        for(double i = 0; i <= l2; i+=l2/20)
-        {
-            double er = Electret.error(i,R);
-            series.getData().add(new XYChart.Data(i,er));
-        }
-
-        chartThree.getYAxis().setLabel("Расстояние, E");
-        chartThree.getXAxis().setLabel("Ошибка");
-        chartThree.getData().add(series);
-
-        chartThree.setTitle("Отношение E к ошибке");
-    }
-
-    private void drawGraphicFour(double R, double eps, double x, double l1, double l2, double l3, double p_, double U, double M)
+    private void drawGraphicThree(double R, double eps, double x, double l1, double l2, double l3, double p_, double U, double M)
     {
         XYChart.Series series = new XYChart.Series();
 
@@ -353,17 +383,17 @@ public class Controller
         for(double i = 0; i <= E; i+=E/20)
         {
             double u = Electret.deformation(M,i);
-            series.getData().add(new XYChart.Data(i*Math.pow(10,9),u*Math.pow(10,21)));
+            series.getData().add(new XYChart.Data(i*Math.pow(10,9),u*Math.pow(10,12)));
         }
 
-        chartFour.getXAxis().setLabel("Напряженность, E, нВ/м");
-        chartFour.getYAxis().setLabel("Деформация, u, 10ˉ²¹");
-        chartFour.getData().add(series);
+        chartThree.getXAxis().setLabel("Напряженность, E, нВ/м");
+        chartThree.getYAxis().setLabel("Деформация, u, 10ˉ¹²");
+        chartThree.getData().add(series);
 
-        chartFour.setTitle("Отношение E к u");
+        chartThree.setTitle("Отношение E к u");
     }
 
-    private void drawGraphicSix(double period, double neff, double R, double eps, double x, double l1, double l2, double l3, double p_, double U, double M)
+    private void drawGraphicFive(double period, double neff, double R, double eps, double x, double l1, double l2, double l3, double p_, double U, double M)
     {
         XYChart.Series series = new XYChart.Series();
 
@@ -382,14 +412,14 @@ public class Controller
             series.getData().add(new XYChart.Data(i,lamda*Math.pow(10,21)));
         }
 
-        chartSix.getXAxis().setLabel("Напряжение, U, В");
-        chartSix.getYAxis().setLabel("Длина волны, λ, им");
-        chartSix.getData().add(series);
+        chartFive.getXAxis().setLabel("Напряжение, U, В");
+        chartFive.getYAxis().setLabel("Длина волны, λ, им");
+        chartFive.getData().add(series);
 
-        chartSix.setTitle("Отношение длины волны к U");
+        chartFive.setTitle("Отношение длины волны к U");
     }
 
-    private void drawGraphicFive(double R, double eps, double x, double l1, double l2, double l3, double p_, double U)
+    private void drawGraphicFour(double R, double eps, double x, double l1, double l2, double l3, double p_, double U)
     {
         XYChart.Series series = new XYChart.Series();
 
@@ -401,12 +431,12 @@ public class Controller
             series.getData().add(new XYChart.Data(i,E*Math.pow(10,9)));
         }
 
-        chartFive.getYAxis().setLabel("Напряженность, E, нВ/м");
-        chartFive.getXAxis().setLabel("Напряжение, U, В");
+        chartFour.getYAxis().setLabel("Напряженность, E, нВ/м");
+        chartFour.getXAxis().setLabel("Напряжение, U, В");
 
-        chartFive.getData().add(series);
+        chartFour.getData().add(series);
 
-        chartFive.setTitle("Отношение E к U");
+        chartFour.setTitle("Отношение E к U");
     }
 
 
@@ -417,7 +447,7 @@ public class Controller
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/library.fxml"));
         Parent root = loader.load();
         Library library = loader.getController();
-        library.setProgressIndicator(progressIndicator);
+       // library.setProgressIndicator(progressIndicator);
         //Parent root = FXMLLoader.load(Controller.class.getResource("../views/library.fxml"));
         Scene scene = new Scene(root);
         stage.getIcons().add(new Image("views/image/books.png"));
@@ -430,7 +460,6 @@ public class Controller
     @FXML
     public void showModel() throws IOException
     {
-
 
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/model.fxml"));
@@ -448,7 +477,9 @@ public class Controller
     @FXML
     public void startModeling()
     {
+
         resultListView.getItems().clear();
+
         chartOne.getData().clear();
         chartTwo.getData().clear();
         chartFour.getData().clear();
@@ -456,9 +487,9 @@ public class Controller
 
         double R = Double.valueOf(dElectretComboBox.getEditor().getText())/2;
         double eps= Double.valueOf(epsilonComboBox.getEditor().getText());
-        double x = Double.valueOf(l2ComboBox.getEditor().getText())/2;
-        double l2= Double.valueOf(l2ComboBox.getEditor().getText());
-        double l3= Double.valueOf(l3ComboBox.getEditor().getText());
+        double x = Double.valueOf(l3ComboBox.getEditor().getText())/2;
+        double l2= Double.valueOf(l3ComboBox.getEditor().getText());
+        double l3= Double.valueOf(l2ComboBox.getEditor().getText());
         double l1 = Double.valueOf(l1ComboBox.getEditor().getText());
         double p_ =Double.valueOf(p_ComboBox.getEditor().getText());
         double U = Double.valueOf(UComboBox.getEditor().getText());
@@ -475,34 +506,67 @@ public class Controller
         double u = Electret.deformation(M, E);
         double Fmax = Electret.maxForce(E,eps,dCabel);
         double lamda = Electret.lengthWave(neff, period);
-        double lamdaRes = Electret.lengthWave(neff, period*u);
+        double lamdaRes = Electret.lengthWave(neff, period*u+period);
+
+        System.out.println("res"+lamdaRes);
+        System.out.println("lamda"+lamda);
 
         drawGraphicOne(U,p_,eps,R,l1,l2,l3,l2);
         drawGraphicTwo(U,p_,eps,R,l1,l2,l3,M);
         //drawGraphicThree(l2,R);
-        drawGraphicFour(R,eps,x,l1,l2,l3,p_,U,M);
-        drawGraphicFive(R,eps,x,l1,l2,l3,p_,U);
+        drawGraphicThree(R,eps,x,l1,l2,l3,p_,U,M);
+        drawGraphicFour(R,eps,x,l1,l2,l3,p_,U);
+        drawGraphicFive(period, neff,  R,  eps,  x,  l1,  l2,  l3,  p_,  U,  M);
+
+        dataRoport = new DataRoport();
+
+        dataRoport.setdCabel(dCabel);
+        dataRoport.setDeformation(u);
+        dataRoport.setE(E);
+        dataRoport.setEps(eps);
+        dataRoport.setError(Error);
+        dataRoport.setF(F);
+        dataRoport.setFmax(Fmax);
+        dataRoport.setL1(l1);
+        dataRoport.setL2(l2);
+        dataRoport.setL3(l3);
+        dataRoport.setU(U);
+        dataRoport.setR(R);
+        dataRoport.setP_(p_);
+        dataRoport.setP(p);
+        dataRoport.setM(M);
+        dataRoport.setLf(Lf);
+        dataRoport.setLamda(lamda);
+        dataRoport.setLamdaRes(lamdaRes);
+        dataRoport.setPeriod(period);
+        dataRoport.setNeff(neff);
+        dataRoport.setP(p);
 
 
 
-
-        resultListView.getItems().add("Длина волны: "+lamda*Math.pow(10,9)+" нм");
-        resultListView.getItems().add("Длина отраженной волны: "+lamdaRes*Math.pow(10,21) + " им");
-        resultListView.getItems().add("Деформация(u): "+u*Math.pow(10,21)+"*10ˉ²¹");
+        resultListView.getItems().add("Длина волны: "+lamda);
+        resultListView.getItems().add("Длина отраженной волны: "+lamdaRes);
+        resultListView.getItems().add("Деформация(u): "+u);
         resultListView.getItems().add("Дипольный момент электрета (p): "+p+" Кл*м");
         resultListView.getItems().add("Регистрируемая сила (Fmax): "+Fmax*Math.pow(10,12)+" пН");
         resultListView.getItems().add("Сила взаимодействия электретов (F): "+F+" Н");
         resultListView.getItems().add("Напряженность (E): "+E*Math.pow(10,9)+" нВ/м");
         resultListView.getItems().add("Ошибка: "+Error+" %");
 
-        drawGraphicSix(period, neff,  R,  eps,  x,  l1,  l2,  l3,  p_,  U,  M);
+
 
         inputDateModel.setL1(l1);
         inputDateModel.setD(dCabel);
         inputDateModel.setdElectret(R*2);
         inputDateModel.setL2(l2);
         inputDateModel.setLf(Lf);
-        inputDateModel.setL3(l3);///Проверить
+        inputDateModel.setL3(l3);
+        inputDateModel.setEpsilon(eps);
+        inputDateModel.setM(M);
+        inputDateModel.setNeff(neff);
+        inputDateModel.setP_(p_);
+        inputDateModel.setPeriod(period);
+        inputDateModel.setU(U);///Проверить
 
     }
 
@@ -610,13 +674,6 @@ public class Controller
     }
 
 
-    @FXML
-    public void getListChargeElectret() throws SQLException
-    {
-        Map mapConstant = procedure.selectRecords(1002);
-        ObservableList<Object> observableList = FXCollections.observableArrayList(mapConstant.values().toArray());
-        qComboBox.setItems(observableList);
-    }
 
     @FXML
     public void getListElectretPenetration() throws  SQLException
@@ -626,13 +683,6 @@ public class Controller
         epsilonComboBox.setItems(observableList);
     }
 
-    @FXML
-    public void getListDistancePointElectret() throws SQLException
-    {
-        Map mapConstant = procedure.selectRecords(1004);
-        ObservableList<Object> observableList = FXCollections.observableArrayList(mapConstant.values().toArray());
-        distancePointElectret.setItems(observableList);
-    }
 
     @FXML
     public void getM() throws SQLException

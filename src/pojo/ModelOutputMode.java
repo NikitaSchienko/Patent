@@ -13,11 +13,11 @@ public class ModelOutputMode
     private double L;
     private double E;
     private double F;
-    private double u;
+    private double deformation;
     private CheckBox check;
 
 
-    public ModelOutputMode(int number, double l1, double l2, double l3, double r, double U, double l, double e, double f, double u, CheckBox check) {
+    public ModelOutputMode(int number, double l1, double l2, double l3, double r, double U, double l, double e, double f, double deformation, CheckBox check) {
         this.number = number;
         this.l1 = l1;
         this.l2 = l2;
@@ -25,20 +25,10 @@ public class ModelOutputMode
         this.check = check;
         R = r;
         this.U = U;
-        this.u = u;
+        this.deformation = deformation;
         L = l;
         E = e;
         F = f;
-    }
-
-
-
-    public CheckBox getCheck() {
-        return check;
-    }
-
-    public void setCheck(CheckBox check) {
-        this.check = check;
     }
 
     public int getNumber() {
@@ -85,16 +75,8 @@ public class ModelOutputMode
         return U;
     }
 
-    public void setU(double U) {
-        this.U = U;
-    }
-
-    public double getu() {
-        return u;
-    }
-
-    public void setu(double u) {
-        this.u = u;
+    public void setU(double u) {
+        U = u;
     }
 
     public double getL() {
@@ -119,5 +101,21 @@ public class ModelOutputMode
 
     public void setF(double f) {
         F = f;
+    }
+
+    public double getDeformation() {
+        return deformation;
+    }
+
+    public void setDeformation(double deformation) {
+        this.deformation = deformation;
+    }
+
+    public CheckBox getCheck() {
+        return check;
+    }
+
+    public void setCheck(CheckBox check) {
+        this.check = check;
     }
 }

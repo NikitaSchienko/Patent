@@ -76,7 +76,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="701.0" prefWidth="1302.0" styleClass="background" stylesheets="@style.css" VBox.vgrow="ALWAYS">
+        <AnchorPane fx:id="labelProgress" maxHeight="-1.0" maxWidth="-1.0" prefHeight="701.0" prefWidth="1302.0" styleClass="background" stylesheets="@style.css" VBox.vgrow="ALWAYS">
             <children>
                 <TabPane layoutX="625.0" layoutY="323.0" prefHeight="308.0" prefWidth="611.0" style="-fx-border-color: silver;" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="625.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="323.0">
                     <tabs>
@@ -175,27 +175,71 @@
                                     </font>
                                 </Label>
                                 <Label text="Диэлектрическая проницаемость (Ф/м):" />
-                        <ComboBox fx:id="EpsilonComboBox" editable="true" prefWidth="533.0" promptText="2.9" />
+                        <ComboBox fx:id="EpsilonComboBox" editable="true" prefWidth="533.0" promptText="2.9">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin></ComboBox>
                         <Label text="Электрический момент диполя (Кл*м):">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin></Label>
-                        <ComboBox fx:id="pComboBox" editable="true" prefWidth="533.0" promptText="0.00000000000001" />
+                        <ComboBox fx:id="pComboBox" editable="true" prefWidth="533.0" promptText="0.00000000000001">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin></ComboBox>
                         <Label text="Электрострикционный коэффициент (м⁴/Кл²):">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin></Label>
-                        <ComboBox fx:id="MComboBox" editable="true" prefWidth="533.0" promptText="0.04" />
+                        <ComboBox fx:id="MComboBox" editable="true" prefWidth="533.0" promptText="0.04">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin></ComboBox>
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <Label text="Параметры оптического волокна:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Label>
                         <Label text="Показатель преломления оптического волокна:" />
-                        <ComboBox fx:id="neffComboBox" editable="true" prefWidth="533.0" promptText="0.04" />
+                        <ComboBox fx:id="neffComboBox" editable="true" prefWidth="533.0" promptText="0.04">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin></ComboBox>
                         <Label text="Диаметр оптического волокна (м):" />
-                        <ComboBox fx:id="dComboBox" editable="true" prefWidth="533.0" promptText="0.04" />
+                        <ComboBox fx:id="dComboBox" editable="true" prefWidth="533.0" promptText="0.04">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin></ComboBox>
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <Label text="Параметры волны:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Label>
                                 <Label text="Длина волны (м):">
                                     <VBox.margin>
                                         <Insets />
                                     </VBox.margin>
                                 </Label>
-                        <ComboBox fx:id="lamdaComboBox" editable="true" prefWidth="533.0" promptText="0.1" />
+                        <ComboBox fx:id="lamdaComboBox" editable="true" prefWidth="533.0" promptText="0.1">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin></ComboBox>
                         <Label text="Отраженная длина волны (м):" />
                         <ComboBox fx:id="lamdaResultComboBox" editable="true" prefWidth="533.0" promptText="0.04" />
                             </children>
@@ -225,7 +269,6 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <ProgressIndicator fx:id="progressIndicator" layoutX="656.0" layoutY="645.0" prefHeight="32.0" prefWidth="32.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" />
             <Label fx:id="loadLabel" layoutX="741.0" layoutY="660.0" text="Загрузка..." visible="false" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="60.0" />
             <Button layoutX="662.0" layoutY="645.0" mnemonicParsing="false" onAction="#clearAllField" text="Очистить" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0">
                <graphic>
@@ -255,6 +298,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
+            <ProgressBar fx:id="progressBar" layoutX="167.0" layoutY="649.0" prefHeight="23.0" prefWidth="445.0" progress="0.0" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="167.0" />
             </children>
         </AnchorPane>
     </children>
